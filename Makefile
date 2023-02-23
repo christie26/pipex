@@ -1,13 +1,13 @@
-SRC_DIR		= ./src/
 SRCS		= 	main.c \
 				utils.c \
 				set_path.c
-
 OBJS		:= $(SRCS:%.c=%.o)
+
+SRC_DIR		= ./src/
 SRCS		:= $(addprefix $(SRC_DIR), $(SRCS))
 
 OBJ_DIR 	= ./obj/
-OBJS_FILES 	:= $(addprefix $(OBJ_DIR), $(OBJS))
+OBJS		:= $(addprefix $(OBJ_DIR), $(OBJS))
 
 NAME		= ./pipex
 LIBFT		= ./libft/libft.a
@@ -25,13 +25,13 @@ $(OBJ_DIR):
 $(OBJ_DIR)%.o : $(SRC_DIR)%.c | $(OBJ_DIR)
 			$(CC) $(CFLAG) -Ilibft -c $< -o $@
 
-$(NAME): 	$(OBJS_FILES) $(LIBFT)
-			$(CC) $(OBJS_FILES) -L./libft -lft -o $(NAME) 
+$(NAME): 	$(OBJS) $(LIBFT)
+			$(CC) $(OBJS) -L./libft -lft -o $(NAME) 
 
 $(LIBFT):
 			make -j3 -C ./libft all
 clean:
-			${RM} ${OBJS_FILES}
+			${RM} ${OBJS}
 			@make -C ./libft clean
 
 fclean:		clean
