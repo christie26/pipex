@@ -12,6 +12,8 @@ typedef struct s_data {
 	char	*cmd2;
 	char	**cmd_options1;
 	char	**cmd_options2;
+	char	*path_cmd1;
+	char	*path_cmd2;
 }	t_data;
 
 // handle error 
