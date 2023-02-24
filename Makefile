@@ -1,6 +1,8 @@
 SRCS		= 	main.c \
 				utils.c \
-				set_path.c
+				pipex_set.c \
+				execute_command.c
+
 OBJS		:= $(SRCS:%.c=%.o)
 
 SRC_DIR		= ./src/

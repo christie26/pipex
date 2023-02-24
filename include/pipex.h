@@ -22,4 +22,6 @@ void	ft_handle_syscall(char *filename, int line);
 
 int		pipex_set(char **av, char **env, t_data *data);
 
+int		execute_command(t_data *data, char **env);
+
 #endif
