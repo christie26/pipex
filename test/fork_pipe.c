@@ -29,8 +29,8 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	}
 	if (cpid == 0) 
-	{                               /* Child reads from pipe */
-		printf("I am the child.\n");
+	{                                  /* Child reads from pipe */
+		printf("I am the child.\n");   
 		printf("child-read = %d\nchild-write = %d\n", pipefd[0], pipefd[1]);
 		close(pipefd[1]);              /* Close unused write end */
 		printf("The child is about to read from the pipe.\n");

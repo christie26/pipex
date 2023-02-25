@@ -18,6 +18,7 @@ typedef struct s_data {
 	char	*path_cmd1;
 	char	*path_cmd2;
 	int		infile_fd;
+	int		outfile_fd;
 }	t_data;
 
 // handle error 

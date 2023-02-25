@@ -95,6 +95,9 @@ int	pipex_set(char **av, char **env, t_data *data)
 	data->infile_fd = open(av[1], O_RDONLY);
 	if (data->infile_fd == -1)
 		ft_error_syscall(__FILE__, __LINE__);
+	data->outfile_fd = open(av[4], O_WRONLY);
+	if (data->outfile_fd == -1)
+		ft_error_syscall(__FILE__, __LINE__);
 	if (get_cmd(data, av))
 		ft_error_syscall(__FILE__, __LINE__);
 	if (get_path_cmd(data, path))
