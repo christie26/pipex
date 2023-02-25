@@ -22,7 +22,7 @@ void	ft_error_msg(char *error_message, char *filename, int line)
 	exit (EXIT_FAILURE);
 }
 
-void	ft_handle_syscall(char *filename, int line)
+void	ft_error_syscall(char *filename, int line)
 {
 	ft_putstr_fd(filename, STDERR_FILENO);
 	ft_putchar_fd(':', STDERR_FILENO);

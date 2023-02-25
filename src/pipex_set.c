@@ -92,13 +92,13 @@ int	pipex_set(char **av, char **env, t_data *data)
 	int		infile_fd;
 
 	path = get_path(env);
-	infile_fd = open(av[1], O_RDONLY);
-	if (infile_fd == -1)
-		ft_handle_syscall(__FILE_NAME__, __LINE__);
+	data->infile_fd = open(av[1], O_RDONLY);
+	if (data->infile_fd == -1)
+		ft_error_syscall(__FILE__, __LINE__);
 	if (get_cmd(data, av))
-		ft_handle_syscall(__FILE_NAME__, __LINE__);
+		ft_error_syscall(__FILE__, __LINE__);
 	if (get_path_cmd(data, path))
-		ft_error_msg("Invalid command", __FILE_NAME__, __LINE__);
+		ft_error_msg("Invalid command", __FILE__, __LINE__);
 //	printf("%s\n%s\n", data->path_cmd1, data->path_cmd2);
 	return (0);
 }

@@ -1,7 +1,7 @@
 SRCS		= 	main.c \
 				utils.c \
 				pipex_set.c \
-				execute_command.c
+				pipex_execute.c
 
 OBJS		:= $(SRCS:%.c=%.o)
 
