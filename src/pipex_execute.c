@@ -38,8 +38,9 @@ int	pipex_execute(t_data *data, char **env)
 		ret = dup2(pipefd[WRITE], STDOUT_FILENO);
 		if (ret == -1)
 			ft_error_syscall(__FILE__, __LINE__);
-		execve(data->path_cmd1, data->cmd_options1, env);
+		close(data->file_fd[READ]);
 		close(pipefd[WRITE]);
+		execve(data->path_cmd1, data->cmd_options1, env);
 	}
 	else
 	{
@@ -51,8 +52,9 @@ int	pipex_execute(t_data *data, char **env)
 		ret = dup2(data->file_fd[WRITE], STDOUT_FILENO);
 		if (ret == -1)
 			ft_error_syscall(__FILE__, __LINE__);
-		execve(data->path_cmd2, data->cmd_options2, env);
+		close(data->file_fd[WRITE]);
 		close(pipefd[READ]);
+		execve(data->path_cmd2, data->cmd_options2, env);
 	}
 	return (0);
 }
