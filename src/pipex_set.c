@@ -28,11 +28,15 @@ char	**get_path(char **env)
 	}
 	all_path = env[i] + 5;
 	path = ft_split(all_path, ':');
+	if (!path)
+		ft_error_msg("Fail to malloc();", __FILE__, __LINE__);
 	i = 0;
 	while (path[i])
 	{
 		tmp = path[i];
 		path[i] = ft_strjoin(path[i], "/");
+		if (!path[i])
+			ft_error_msg("Fail to malloc();", __FILE__, __LINE__);
 		free(tmp);
 		i++;
 	}
