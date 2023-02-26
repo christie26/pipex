@@ -11,6 +11,12 @@
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+/*
+int	dup_pipefd(int read_end, int write_end)
+{
+	
+}
+*/
 
 int	pipex_execute(t_data *data, char **env)
 {
@@ -18,41 +24,35 @@ int	pipex_execute(t_data *data, char **env)
 	int		ret;
 	pid_t	cpid;
 
-
 	if (pipe(pipefd) == -1)
 		ft_error_msg("Fail to call pipe();", __FILE__, __LINE__);
-	cpid = fork();	// fork(); return child process's PID
+	cpid = fork();
 	if (cpid == -1)
 		ft_error_msg("Fail to call fork();", __FILE__, __LINE__);
-	
-
-	if (cpid == 0)	// child process	[infile -> pipefd[WRITE]]
+	if (cpid == 0)
 	{
-		printf("I am the child process\n");
-		printf("Child read %d, write %d\n", pipefd[READ], pipefd[WRITE]);
-
-		ret =  dup2(data->infile_fd, STDIN_FILENO);
-	//	printf("dup2: %d -> %d\nreturn = %d\n", STDIN_FILENO, data->infile_fd, ret);
-		ret =  dup2(pipefd[WRITE], STDOUT_FILENO);
-	//	printf("dup2: %d -> %d\nreturn = %d\n", STDOUT_FILENO, pipefd[WRITE], ret);
+		close(pipefd[READ]);
+		ret = dup2(data->file_fd[READ], STDIN_FILENO);
+		if (ret == -1)
+			ft_error_syscall(__FILE__, __LINE__);
+		ret = dup2(pipefd[WRITE], STDOUT_FILENO);
+		if (ret == -1)
+			ft_error_syscall(__FILE__, __LINE__);
 		execve(data->path_cmd1, data->cmd_options1, env);
-
+		close(pipefd[WRITE]);
 	}
-
-
-	else 			// parent process	[pipefd[READ] -> outfile]
+	else
 	{
-		printf("I am the parent process\n");
-		printf("Parent read %d, write %d\n", pipefd[READ], pipefd[WRITE]);
-	
-		ret =  dup2(pipefd[READ], STDIN_FILENO);
-	//	printf("dup2: %d -> %d\nreturn = %d\n", STDIN_FILENO, pipefd[READ], ret);
-		ret =  dup2(data->outfile_fd, STDOUT_FILENO);
-	//	printf("dup2: %d -> %d\nreturn = %d\n", STDOUT_FILENO, data->outfile_fd, ret);
+		close(pipefd[WRITE]);
+		wait(0);
+		ret = dup2(pipefd[READ], STDIN_FILENO);
+		if (ret == -1)
+			ft_error_syscall(__FILE__, __LINE__);
+		ret = dup2(data->file_fd[WRITE], STDOUT_FILENO);
+		if (ret == -1)
+			ft_error_syscall(__FILE__, __LINE__);
 		execve(data->path_cmd2, data->cmd_options2, env);
+		close(pipefd[READ]);
 	}
-
-
-
 	return (0);
 }

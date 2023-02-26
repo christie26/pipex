@@ -1,5 +1,2 @@
-dup2: 1 -> 4
-return = 1
-dup2: 1 -> 6
-return = 1
 happy
+sad

@@ -62,8 +62,9 @@ char	*check_access(char *cmd, char **path)
 	i = 0;
 	while (path[i])
 	{
-		// what if fail malloc here?
 		path_cmd = ft_strjoin(path[i], cmd);
+		if (!path_cmd)
+			ft_error_msg("Fail to malloc();", __FILE__, __LINE__);
 		if (access(path_cmd, X_OK) == 0)
 			return (path_cmd);
 	i++;
@@ -89,19 +90,17 @@ int	get_path_cmd(t_data *data, char **path)
 int	pipex_set(char **av, char **env, t_data *data)
 {
 	char	**path;
-	int		infile_fd;
 
 	path = get_path(env);
-	data->infile_fd = open(av[1], O_RDONLY);
-	if (data->infile_fd == -1)
+	data->file_fd[READ] = open(av[1], O_RDONLY);
+	if (data->file_fd[READ] == -1)
 		ft_error_syscall(__FILE__, __LINE__);
-	data->outfile_fd = open(av[4], O_WRONLY);
-	if (data->outfile_fd == -1)
+	data->file_fd[WRITE] = open(av[4], O_CREAT | O_WRONLY);
+	if (data->file_fd[WRITE] == -1)
 		ft_error_syscall(__FILE__, __LINE__);
 	if (get_cmd(data, av))
 		ft_error_syscall(__FILE__, __LINE__);
 	if (get_path_cmd(data, path))
 		ft_error_msg("Invalid command", __FILE__, __LINE__);
-//	printf("%s\n%s\n", data->path_cmd1, data->path_cmd2);
 	return (0);
 }
