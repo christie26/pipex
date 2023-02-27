@@ -84,13 +84,20 @@ char	*check_access(char *cmd, char **path)
 int	get_path_cmd(t_data *data, char **path)
 {
 	char	*path_cmd;
+	char	*cmd_tmp;
+	int		i;
 
-	data->path_cmd1 = check_access(data->cmd1, path);
-	if (!data->path_cmd1)
-		return (EXIT_FAILURE);
-	data->path_cmd2 = check_access(data->cmd2, path);
-	if (!data->path_cmd2)
-		return (EXIT_FAILURE);
+	i = 0;
+	while (i < data->number)
+	{
+		cmd_tmp = data->cmd[i];
+		data->cmd[i] = check_access(data->cmd[i], path);
+//		printf("%dth cmd: %s\n", i, data->cmd[i]);
+		if (!data->cmd[i])
+			return (EXIT_FAILURE);
+		free(data->cmd[i]);
+		i++;
+	}
 	return (EXIT_SUCCESS);
 }
 
@@ -111,7 +118,7 @@ int	pipex_set(char **av, char **env, t_data *data)
 	if (get_cmd(data, av))
 		ft_error_syscall(__FILE__, __LINE__);
 
-//	if (get_path_cmd(data, path))
-//		ft_error_msg("Invalid command", __FILE__, __LINE__);
+	if (get_path_cmd(data, path))
+		ft_error_msg("Invalid command", __FILE__, __LINE__);
 	return (0);
 }

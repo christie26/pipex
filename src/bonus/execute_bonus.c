@@ -12,7 +12,7 @@
 
 #include "../include/pipex_bonus.h"
 
-void	child_process(t_data *data, int pipefd[], char **env)
+void	first_process(t_data *data, int pipefd[], char **env)
 {
 	int	ret;
 
@@ -25,10 +25,25 @@ void	child_process(t_data *data, int pipefd[], char **env)
 		ft_error_syscall(__FILE__, __LINE__);
 	close(data->file_fd[READ]);
 	close(pipefd[WRITE]);
-	execve(data->path_cmd1, data->cmd_options1, env);
+	execve(data->cmd[0], data->cmd_options[0], env);
 }
 
-void	parent_process(t_data *data, int pipefd[], char **env)
+void	middle_process(t_data *data, int pipefd[], char **env, int i)
+{
+	int	ret;
+
+	ret = dup2(pipefd[READ], STDIN_FILENO);
+	if (ret == -1)
+		ft_error_syscall(__FILE__, __LINE__);
+	ret = dup2(pipefd[WRITE], STDOUT_FILENO);
+	if (ret == -1)
+		ft_error_syscall(__FILE__, __LINE__);
+	close(pipefd[READ]);
+	close(pipefd[WRITE]);
+	execve(data->cmd[i], data->cmd_options[i], env);
+}
+
+void	last_process(t_data *data, int pipefd[], char **env, int i)
 {
 	int	ret;
 
@@ -42,22 +57,42 @@ void	parent_process(t_data *data, int pipefd[], char **env)
 		ft_error_syscall(__FILE__, __LINE__);
 	close(pipefd[READ]);
 	close(data->file_fd[WRITE]);
-	execve(data->path_cmd2, data->cmd_options2, env);
+	execve(data->cmd[i], data->cmd_options[i], env);
 }
 
 int	pipex_execute(t_data *data, char **env)
 {
 	int		pipefd[2];
 	pid_t	cpid;
+	int		i;
 
-	if (pipe(pipefd) == -1)
-		ft_error_msg("Fail to call pipe();", __FILE__, __LINE__);
-	cpid = fork();
-	if (cpid == -1)
-		ft_error_msg("Fail to call fork();", __FILE__, __LINE__);
-	if (cpid == 0)
-		child_process(data, pipefd, env);
-	else
-		parent_process(data, pipefd, env);
+	i = 0;
+	while (i < data->number)
+	{
+		if (pipe(pipefd) == -1)
+			ft_error_msg("Fail to call pipe();", __FILE__, __LINE__);
+		cpid = fork();
+		if (cpid == -1)
+			ft_error_msg("Fail to call fork();", __FILE__, __LINE__);
+	
+		if (cpid == 0)
+		{
+			printf("%dth process start\n", i);
+			if (i == 0)	
+				first_process(data, pipefd, env);
+			else if (i == data->number - 1)
+				last_process(data, pipefd, env, i);
+			else
+				middle_process(data, pipefd, env, i);
+		}
+		else
+		{
+			close(pipefd[READ]);
+			close(pipefd[WRITE]);
+			waitpid(cpid, 0, 0);
+		}
+		i++;
+	}
+
 	return (0);
 }
