@@ -15,19 +15,15 @@
 char	**get_path(char **env)
 {
 	int		i;
-	char	*all_path;
 	char	**path;
 	char	*tmp;
 
-	i = 0;
-	while (env[i])
+	while (*env++)
 	{
-		if (!ft_strncmp(env[i], "PATH", 4))
+		if (!ft_strncmp(*env, "PATH", 4))
 			break ;
-		i++;
 	}
-	all_path = env[i] + 5;
-	path = ft_split(all_path, ':');
+	path = ft_split((*env + 5), ':');
 	if (!path)
 		ft_error_msg("Fail to malloc();", __FILE__, __LINE__);
 	i = 0;
@@ -66,6 +62,7 @@ char	*check_access(char *cmd, char **path)
 	i = 0;
 	while (path[i])
 	{
+		// don't add / if they already have it
 		path_cmd = ft_strjoin(path[i], cmd);
 		if (!path_cmd)
 			ft_error_msg("Fail to malloc();", __FILE__, __LINE__);

@@ -11,17 +11,43 @@
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
-/*
-int	dup_pipefd(int read_end, int write_end)
+
+void	child_process(t_data *data, int pipefd[], char **env)
 {
-	
+	int	ret;
+
+	close(pipefd[READ]);
+	ret = dup2(data->file_fd[READ], STDIN_FILENO);
+	if (ret == -1)
+		ft_error_syscall(__FILE__, __LINE__);
+	ret = dup2(pipefd[WRITE], STDOUT_FILENO);
+	if (ret == -1)
+		ft_error_syscall(__FILE__, __LINE__);
+	close(data->file_fd[READ]);
+	close(pipefd[WRITE]);
+	execve(data->path_cmd1, data->cmd_options1, env);
 }
-*/
+
+void	parent_process(t_data *data, int pipefd[], char **env)
+{
+	int	ret;
+
+	close(pipefd[WRITE]);
+	wait(0);
+	ret = dup2(pipefd[READ], STDIN_FILENO);
+	if (ret == -1)
+		ft_error_syscall(__FILE__, __LINE__);
+	ret = dup2(data->file_fd[WRITE], STDOUT_FILENO);
+	if (ret == -1)
+		ft_error_syscall(__FILE__, __LINE__);
+	close(data->file_fd[WRITE]);
+	close(pipefd[READ]);
+	execve(data->path_cmd2, data->cmd_options2, env);
+}
 
 int	pipex_execute(t_data *data, char **env)
 {
 	int		pipefd[2];
-	int		ret;
 	pid_t	cpid;
 
 	if (pipe(pipefd) == -1)
@@ -30,31 +56,8 @@ int	pipex_execute(t_data *data, char **env)
 	if (cpid == -1)
 		ft_error_msg("Fail to call fork();", __FILE__, __LINE__);
 	if (cpid == 0)
-	{
-		close(pipefd[READ]);
-		ret = dup2(data->file_fd[READ], STDIN_FILENO);
-		if (ret == -1)
-			ft_error_syscall(__FILE__, __LINE__);
-		ret = dup2(pipefd[WRITE], STDOUT_FILENO);
-		if (ret == -1)
-			ft_error_syscall(__FILE__, __LINE__);
-		close(data->file_fd[READ]);
-		close(pipefd[WRITE]);
-		execve(data->path_cmd1, data->cmd_options1, env);
-	}
+		child_process(data, pipefd, env);
 	else
-	{
-		close(pipefd[WRITE]);
-		wait(0);
-		ret = dup2(pipefd[READ], STDIN_FILENO);
-		if (ret == -1)
-			ft_error_syscall(__FILE__, __LINE__);
-		ret = dup2(data->file_fd[WRITE], STDOUT_FILENO);
-		if (ret == -1)
-			ft_error_syscall(__FILE__, __LINE__);
-		close(data->file_fd[WRITE]);
-		close(pipefd[READ]);
-		execve(data->path_cmd2, data->cmd_options2, env);
-	}
+		parent_process(data, pipefd, env);
 	return (0);
 }
