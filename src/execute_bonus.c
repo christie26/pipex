@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   execute_command.c                                  :+:      :+:    :+:   */
+/*   execute_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:50:50 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/02/24 19:43:17 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/02/27 16:43:13 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../include/pipex_bonus.h"
 
 void	child_process(t_data *data, int pipefd[], char **env)
 {
@@ -40,8 +40,8 @@ void	parent_process(t_data *data, int pipefd[], char **env)
 	ret = dup2(data->file_fd[WRITE], STDOUT_FILENO);
 	if (ret == -1)
 		ft_error_syscall(__FILE__, __LINE__);
-	close(data->file_fd[WRITE]);
 	close(pipefd[READ]);
+	close(data->file_fd[WRITE]);
 	execve(data->path_cmd2, data->cmd_options2, env);
 }
 
