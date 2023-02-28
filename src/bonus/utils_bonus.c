@@ -1,16 +1,17 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils.c                                            :+:      :+:    :+:   */
+/*   utils_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:25 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/02/24 18:02:11 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/02/28 19:18:50 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../include/pipex_bonus.h"
+#include <stdio.h>
 
 void	ft_error_msg(char *error_message, char *filename, int line)
 {
@@ -28,5 +29,6 @@ void	ft_error_syscall(char *filename, int line)
 	ft_putchar_fd(':', STDERR_FILENO);
 	ft_putnbr_fd(line, STDERR_FILENO);
 	perror(": error");
+//	fprintf(stderr, "pid: %d\n", getpid());
 	exit (EXIT_FAILURE);
 }

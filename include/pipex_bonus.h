@@ -16,6 +16,11 @@ typedef struct s_data {
 	char	***cmd_options;
 //	char	**path_cmd; I can overwrite on cmd 
 	int		file_fd[2];
+//	int		**p_fd;
+//	char	**env;
+	int		read_fd;
+	char	*infile;
+	char	*outfile;
 }	t_data;
 
 // handle error 

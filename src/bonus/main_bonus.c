@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:46 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/02/27 17:01:09 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/02/28 18:57:51 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	main(int ac, char **av, char **env)
 
 	data.cmd = (char **)malloc(sizeof(char *) * data.number);
 	data.cmd_options = (char ***)malloc(sizeof(char **) * data.number);
-
 	pipex_set(av, env, &data);
 	pipex_execute(&data, env);
 	return (EXIT_SUCCESS);

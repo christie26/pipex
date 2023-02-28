@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:36 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/02/27 17:31:21 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/02/28 18:59:10 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,6 @@ int	get_path_cmd(t_data *data, char **path)
 	{
 		cmd_tmp = data->cmd[i];
 		data->cmd[i] = check_access(data->cmd[i], path);
-//		printf("%dth cmd: %s\n", i, data->cmd[i]);
 		if (!data->cmd[i])
 			return (EXIT_FAILURE);
 		free(data->cmd[i]);
@@ -107,18 +106,14 @@ int	pipex_set(char **av, char **env, t_data *data)
 
 	path = get_path(env);
 
-	// should I keep it here? or open it after fork ? 
-	data->file_fd[READ] = open(av[1], O_RDONLY);
-	if (data->file_fd[READ] == -1)
-		ft_error_syscall(__FILE__, __LINE__);
-	data->file_fd[WRITE] = open(av[4], O_CREAT | O_WRONLY | O_TRUNC, 0644);
-	if (data->file_fd[WRITE] == -1)
-		ft_error_syscall(__FILE__, __LINE__);
+	data->infile = av[1];
+	data->outfile = av[data->number + 2];
 
 	if (get_cmd(data, av))
 		ft_error_syscall(__FILE__, __LINE__);
-
+	
 	if (get_path_cmd(data, path))
 		ft_error_msg("Invalid command", __FILE__, __LINE__);
+	
 	return (0);
 }
