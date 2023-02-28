@@ -17,7 +17,6 @@ void	first_child(t_data *data, int *p_fd, char **env, int i)
 	int	ret;
 	int	infile;
 
-//	printf("%dc: %d, %d, %d\n",i, p_fd[READ], p_fd[WRITE], data->read_fd);
 	close(p_fd[READ]);
 	infile = open(data->infile, O_RDONLY);
 	ret = dup2(infile, STDIN_FILENO);
@@ -36,7 +35,6 @@ void	middle_child(t_data *data, int *p_fd, char **env, int i)
 {
 	int	ret;
 
-//	printf("%dc: %d, %d, %d\n", i, p_fd[READ], p_fd[WRITE], data->read_fd);
 	close(p_fd[READ]);
 	ret = dup2(data->read_fd, STDIN_FILENO);
 	if (ret == -1)
@@ -54,7 +52,7 @@ void	last_child(t_data *data, int *p_fd, char **env, int i)
 {
 	int	ret;
 	int	outfile;
-//	printf("%dc: %d, %d, %d\n", i, p_fd[READ], p_fd[WRITE], data->read_fd);
+
 	outfile = open(data->outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 	close(p_fd[READ]);
 	close(p_fd[WRITE]);
@@ -73,7 +71,6 @@ void	first_parent(t_data *data, int *p_fd, int i)
 {
 	data->read_fd = p_fd[READ];
 	close(p_fd[WRITE]);
-	printf("%dp: %d, %d, %d\n", i, p_fd[READ], p_fd[WRITE], data->read_fd);
 }
 
 void	middle_parent(t_data *data, int *p_fd, int i)
@@ -81,7 +78,6 @@ void	middle_parent(t_data *data, int *p_fd, int i)
 	close(data->read_fd);
 	close(p_fd[WRITE]);
 	data->read_fd = p_fd[READ];
-	printf("%dp: %d, %d, %d\n", i, p_fd[READ], p_fd[WRITE], data->read_fd);
 }
 
 void	last_parent(t_data *data, int *p_fd, int i)
@@ -89,7 +85,6 @@ void	last_parent(t_data *data, int *p_fd, int i)
 	close(data->read_fd);
 	close(p_fd[READ]);
 	close(p_fd[WRITE]);
-	printf("%dp: %d, %d, %d\n", i, p_fd[READ], p_fd[WRITE], data->read_fd);
 }
 
 int	pipex_execute(t_data *data, char **env)
@@ -112,10 +107,7 @@ int	pipex_execute(t_data *data, char **env)
 			if (i == 0)
 				first_child(data, p_fd, env, i);
 			else if (i == data->number - 1)
-			{
-				printf("last child\n");
 				last_child(data, p_fd, env, i);
-			}
 			else
 				middle_child(data, p_fd, env, i);
 		}
@@ -133,8 +125,5 @@ int	pipex_execute(t_data *data, char **env)
 	waitpid(-1, 0, 0);
 	waitpid(-1, 0, 0);
 	waitpid(-1, 0, 0);
-	printf("finish\n");
-	close(data->file_fd[0]);
-	close(data->file_fd[1]);
 	return (0);
 }

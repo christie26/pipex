@@ -29,6 +29,5 @@ void	ft_error_syscall(char *filename, int line)
 	ft_putchar_fd(':', STDERR_FILENO);
 	ft_putnbr_fd(line, STDERR_FILENO);
 	perror(": error");
-//	fprintf(stderr, "pid: %d\n", getpid());
 	exit (EXIT_FAILURE);
 }

@@ -84,17 +84,17 @@ char	*check_access(char *cmd, char **path)
 int	get_path_cmd(t_data *data, char **path)
 {
 	char	*path_cmd;
-	char	*cmd_tmp;
+	char	*tmp;
 	int		i;
 
 	i = 0;
 	while (i < data->number)
 	{
-		cmd_tmp = data->cmd[i];
+		tmp = data->cmd[i];
 		data->cmd[i] = check_access(data->cmd[i], path);
 		if (!data->cmd[i])
 			return (EXIT_FAILURE);
-		free(data->cmd[i]);
+		free(tmp);
 		i++;
 	}
 	return (EXIT_SUCCESS);
