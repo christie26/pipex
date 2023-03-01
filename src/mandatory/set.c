@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_set.c                                        :+:      :+:    :+:   */
+/*   set.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:36 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/02/27 15:20:41 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/01 14:13:45 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,6 @@ char	**get_path(char **env)
 
 int	get_cmd(t_data *data, char **av)
 {
-	int		i;
-
 	data->cmd_options1 = ft_split(av[2], ' ');
 	if (!data->cmd_options1)
 		return (EXIT_FAILURE);
@@ -81,8 +79,6 @@ char	*check_access(char *cmd, char **path)
 
 int	get_path_cmd(t_data *data, char **path)
 {
-	char	*path_cmd;
-
 	data->path_cmd1 = check_access(data->cmd1, path);
 	if (!data->path_cmd1)
 		return (EXIT_FAILURE);

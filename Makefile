@@ -24,6 +24,10 @@ SRCS2		:= $(addprefix $(SRC_DIR2), $(SRCS2))
 OBJ_DIR2 	= ./obj/bonus/
 OBJS2		:= $(addprefix $(OBJ_DIR2), $(OBJS2))
 
+ifdef BONUS
+	OBJS	:= $(OBJS2)
+endif
+
 NAME		= ./pipex
 LIBFT		= ./libft/libft.a
 
@@ -40,22 +44,22 @@ $(OBJ_DIR2):
 			mkdir -p $(OBJ_DIR2)
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJ_DIR)
-			$(CC) $(CFLAG) -Ilibft -c $< -o $@
+			$(CC) $(CFLAGS) -Ilibft -c $< -o $@
 
 $(OBJ_DIR2)%.o: $(SRC_DIR2)%.c | $(OBJ_DIR2)
-			$(CC) $(CFLAG) -Ilibft -c $< -o $@
+			$(CC) $(CFLAGS) -Ilibft -c $< -o $@
 
 $(NAME): 	$(OBJS) $(LIBFT)
-			$(CC) $(OBJS) -L./libft -lft -o $(NAME) 
+			$(CC) $(CFLAGS) $(OBJS) -L./libft -lft -o $(NAME) 
 
 $(LIBFT):
 			make -j3 -C ./libft all
 
 bonus:		$(OBJS2) $(LIBFT)
-			$(CC) $(OBJS2) -L./libft -lft -o $(NAME)
+			@make BONUS=1 all
 
 clean:
-			${RM} ${OBJS}
+			${RM} ${OBJS} ${OBJS2}
 			@make -C ./libft clean
 
 fclean:		clean

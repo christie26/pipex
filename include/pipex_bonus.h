@@ -14,18 +14,15 @@ typedef struct s_data {
 	int		number;
 	char	**cmd;
 	char	***cmd_options;
-//	char	**path_cmd; I can overwrite on cmd 
 	int		file_fd[2];
-//	int		**p_fd;
-//	char	**env;
 	int		read_fd;
 	char	*infile;
 	char	*outfile;
 }	t_data;
 
 // handle error 
-void	ft_error_msg(char *error_message, char *filename, int line);
-void	ft_error_syscall(char *filename, int line);
+void	ft_err_msg(int condition, char *error_message, char *file, int line);
+void	ft_err_sys(int condition, char *file, int line);
 
 // set path and check accessibility
 int		pipex_set(char **av, char **env, t_data *data);

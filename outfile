@@ -1,5 +1,9 @@
-happy
-sad
-etienne
-Lyon
-Paris
+Makefile
+include
+infile
+libft
+obj
+outfile
+pipex
+sleep
+src
