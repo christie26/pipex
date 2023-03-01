@@ -1,9 +1,9 @@
 Makefile
+happy
 include
 infile
 libft
 obj
 outfile
 pipex
-sleep
 src
