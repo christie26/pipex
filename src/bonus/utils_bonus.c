@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:25 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/03/01 18:18:44 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/01 20:33:23 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,4 +33,23 @@ void	ft_err_sys(int condition, char *file, int line)
 	ft_putnbr_fd(line, STDERR_FILENO);
 	perror(": error");
 	exit (EXIT_FAILURE);
+}
+
+void	close_fd(int fd, char *file, int line)
+{
+	int	ret;
+
+	ret = close(fd);
+	ft_err_sys(ret == -1, file, line);
+}
+
+void	duplicate_fd(int read_end, int write_end, char *file, int line)
+{
+	int	ret1;
+	int	ret2;
+
+	ret1 = dup2(read_end, STDIN_FILENO);
+	ft_err_sys(ret1 == -1, file, line);
+	ret2 = dup2(write_end, STDOUT_FILENO);
+	ft_err_sys(ret2 == -1, file, line);
 }

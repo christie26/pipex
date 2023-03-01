@@ -1,63 +1,74 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex_execute.c                                    :+:      :+:    :+:   */
+/*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/24 17:50:50 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/02/27 15:40:57 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/01 21:12:28 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../../include/pipex.h"
 
-void	child_process(t_data *data, int pipefd[], char **env)
+void	child_process(t_data *data, int p_fd[], int i, char **env)
 {
-	int	ret;
+	int	infile;
+	int	outfile;
 
-	close(pipefd[READ]);
-	ret = dup2(data->file_fd[READ], STDIN_FILENO);
-	if (ret == -1)
-		ft_error_syscall(__FILE__, __LINE__);
-	ret = dup2(pipefd[WRITE], STDOUT_FILENO);
-	if (ret == -1)
-		ft_error_syscall(__FILE__, __LINE__);
-	close(data->file_fd[READ]);
-	close(pipefd[WRITE]);
-	execve(data->path_cmd1, data->cmd_options1, env);
+	if (i == 0)
+	{
+		infile = open(data->infile, O_RDONLY);
+		ft_err_sys(infile == -1, __FILE__, __LINE__);
+		duplicate_fd(infile, p_fd[WRITE], __FILE__, __LINE__);
+	}
+	else
+	{
+		outfile = open(data->outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		ft_err_sys(outfile == -1, __FILE__, __LINE__);
+		duplicate_fd(data->read_fd, outfile, __FILE__, __LINE__);
+		close_fd(outfile, __FILE__, __LINE__);
+		close_fd(data->read_fd, __FILE__, __LINE__);
+	}
+	close_fd(p_fd[READ], __FILE__, __LINE__);
+	close_fd(p_fd[WRITE], __FILE__, __LINE__);
+	execve(data->cmd[i], data->cmd_options[i], env);
+	exit(0);
 }
 
-void	parent_process(t_data *data, int pipefd[], char **env)
+void	parent_process(t_data *data, int p_fd[], int i, pid_t cpid)
 {
-	int	ret;
-
-	close(pipefd[WRITE]);
-	wait(0);
-	ret = dup2(pipefd[READ], STDIN_FILENO);
-	if (ret == -1)
-		ft_error_syscall(__FILE__, __LINE__);
-	ret = dup2(data->file_fd[WRITE], STDOUT_FILENO);
-	if (ret == -1)
-		ft_error_syscall(__FILE__, __LINE__);
-	close(pipefd[READ]);
-	close(data->file_fd[WRITE]);
-	execve(data->path_cmd2, data->cmd_options2, env);
+	if (i == 0)
+		data->read_fd = p_fd[READ];
+	else
+	{
+		close_fd(data->read_fd, __FILE__, __LINE__);
+		close_fd(p_fd[READ], __FILE__, __LINE__);
+	}
+	close_fd((p_fd[WRITE]), __FILE__, __LINE__);
+	data->pid_set[i] = cpid;
 }
 
 int	pipex_execute(t_data *data, char **env)
 {
-	int		pipefd[2];
+	int		i;
+	int		p_fd[2];
 	pid_t	cpid;
 
-	if (pipe(pipefd) == -1)
-		ft_error_msg("Fail to call pipe();", __FILE__, __LINE__);
-	cpid = fork();
-	if (cpid == -1)
-		ft_error_msg("Fail to call fork();", __FILE__, __LINE__);
-	if (cpid == 0)
-		child_process(data, pipefd, env);
-	else
-		parent_process(data, pipefd, env);
+	i = 0;
+	while (i < 2)
+	{
+		ft_err_sys(pipe(p_fd) == -1, __FILE__, __LINE__);
+		cpid = fork();
+		ft_err_sys(cpid == -1, __FILE__, __LINE__);
+		if (cpid == 0)
+			child_process(data, p_fd, i, env);
+		else
+			parent_process(data, p_fd, i, cpid);
+		i++;
+	}
+	waitpid(data->pid_set[0], 0, 0);
+	waitpid(data->pid_set[1], 0, 0);
 	return (0);
 }

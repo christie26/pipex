@@ -6,34 +6,35 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:36 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/03/01 18:18:42 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/01 21:03:55 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/pipex_bonus.h"
-#include <stdlib.h>
 
-void	get_path(char **env, char ***path)
+char	**get_path(char **env)
 {
 	int		i;
 	char	*tmp;
+	char	**path;
 
 	while (*env++)
 	{
 		if (!ft_strncmp(*env, "PATH", 4))
 			break ;
 	}
-	*path = ft_split((*env + 5), ':');
-	ft_err_msg(!(*path), "Fail to malloc();", __FILE__, __LINE__);
+	path = ft_split((*env + 5), ':');
+	ft_err_msg(!path, "Fail to malloc();", __FILE__, __LINE__);
 	i = 0;
-	while ((*path)[i])
+	while (path[i])
 	{
-		tmp = (*path)[i];
-		(*path)[i] = ft_strjoin((*path)[i], "/");
-		ft_err_msg(!(*path)[i], "Fail to malloc();", __FILE__, __LINE__);
+		tmp = path[i];
+		path[i] = ft_strjoin(path[i], "/");
+		ft_err_msg(!path[i], "Fail to malloc();", __FILE__, __LINE__);
 		free(tmp);
 		i++;
 	}
+	return (path);
 }
 
 void	get_cmd(t_data *data, char **av)
@@ -90,7 +91,7 @@ int	pipex_set(char **av, char **env, t_data *data)
 {
 	char	**path;
 
-	get_path(env, &path);
+	path = get_path(env);
 	data->infile = av[1];
 	data->outfile = av[data->number + 2];
 	get_cmd(data, av);

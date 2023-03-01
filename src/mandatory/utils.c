@@ -6,14 +6,16 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:25 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/02/24 18:02:11 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/01 20:33:48 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../../include/pipex.h"
 
-void	ft_error_msg(char *error_message, char *filename, int line)
+void	ft_err_msg(int condition, char *error_message, char *filename, int line)
 {
+	if (!condition)
+		return ;
 	ft_putstr_fd(filename, STDERR_FILENO);
 	ft_putchar_fd(':', STDERR_FILENO);
 	ft_putnbr_fd(line, STDERR_FILENO);
@@ -22,11 +24,32 @@ void	ft_error_msg(char *error_message, char *filename, int line)
 	exit (EXIT_FAILURE);
 }
 
-void	ft_error_syscall(char *filename, int line)
+void	ft_err_sys(int condition, char *filename, int line)
 {
+	if (!condition)
+		return ;
 	ft_putstr_fd(filename, STDERR_FILENO);
 	ft_putchar_fd(':', STDERR_FILENO);
 	ft_putnbr_fd(line, STDERR_FILENO);
 	perror(": error");
 	exit (EXIT_FAILURE);
+}
+
+void	close_fd(int fd, char *file, int line)
+{
+	int	ret;
+
+	ret = close(fd);
+	ft_err_sys(ret == -1, file, line);
+}
+
+void	duplicate_fd(int read_end, int write_end, char *file, int line)
+{
+	int	ret1;
+	int	ret2;
+
+	ret1 = dup2(read_end, STDIN_FILENO);
+	ft_err_sys(ret1 == -1, file, line);
+	ret2 = dup2(write_end, STDOUT_FILENO);
+	ft_err_sys(ret2 == -1, file, line);
 }
