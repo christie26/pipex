@@ -66,6 +66,7 @@ char	*check_access(char *cmd, char **path)
 		ft_err_msg(!path_cmd, "Fail to malloc();", __FILE__, __LINE__);
 		if (access(path_cmd, X_OK) == 0)
 			return (path_cmd);
+		free(path_cmd);
 		i++;
 	}
 	return (0);
@@ -85,6 +86,7 @@ void	get_path_cmd(t_data *data, char **path)
 		free(tmp);
 		i++;
 	}
+	free_array(path, 0);
 }
 
 int	pipex_set(char **av, char **env, t_data *data)
@@ -95,8 +97,7 @@ int	pipex_set(char **av, char **env, t_data *data)
 	if (data->offset == 2)
 		data->infile = av[1];
 	else
-		here_doc();
-//	printf("av[%d]\n", data->number + data->offset);
+		here_doc(data);
 	data->outfile = av[data->number + data->offset];
 	get_cmd(data, av);
 	get_path_cmd(data, path);

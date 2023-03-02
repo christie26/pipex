@@ -34,7 +34,10 @@ void	child_process(t_data *data, int *p_fd, int i, char **env)
 	}
 	else if (i == data->number - 1)
 	{
-		outfile = open(data->outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+		if (data->offset == 3)
+			outfile = open(data->outfile, O_CREAT | O_WRONLY | O_APPEND, 0644);
+		else
+			outfile = open(data->outfile, O_CREAT | O_WRONLY | O_TRUNC, 0644);
 		ft_err_sys(outfile == -1, __FILE__, __LINE__);
 		duplicate_fd(data->read_fd, outfile, __FILE__, __LINE__);
 		close_fd(outfile, __FILE__, __LINE__);
@@ -82,7 +85,8 @@ int	pipex_execute(t_data *data, char **env)
 			parent_process(data, p_fd, i, cpid);
 		i++;
 	}
-	while (data->number--)
-		waitpid(data->pid_set[data->number], 0, 0);
+	i = data->number;
+	while (i--)
+		waitpid(data->pid_set[i], 0, 0);
 	return (0);
 }

@@ -38,6 +38,7 @@ void	ft_err_sys(int condition, char *file, int line);
 //utils
 void	close_fd(int fd, char *file, int line);
 void	duplicate_fd(int read_end, int write_end, char *file, int line);
+void	free_array(char **item);
 
 // set path and check accessibility
 int		pipex_set(char **av, char **env, t_data *data);

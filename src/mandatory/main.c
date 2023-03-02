@@ -12,6 +12,12 @@
 
 #include "../../include/pipex.h"
 
+void	free_center(t_data *data)
+{
+	free(data->cmd_options[0]);
+	free(data->cmd_options[1]);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;
@@ -19,5 +25,6 @@ int	main(int ac, char **av, char **env)
 	ft_err_msg(ac != 5, "Invalid number of arguments", __FILE_NAME__, __LINE__);
 	pipex_set(av, env, &data);
 	pipex_execute(&data, env);
+	free_center(&data);
 	return (EXIT_SUCCESS);
 }

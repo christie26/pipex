@@ -14,6 +14,7 @@
 # define PIPEX_BONUS_H
 
 # include "../libft/src/libft.h"
+# include "../libft/src/get_next_line.h"
 # include <stdio.h>
 # include <fcntl.h>
 # include <stdlib.h>
@@ -21,10 +22,6 @@
 
 # define READ 0
 # define WRITE 1
-
-//typedef struct s_here {
-//	char	*limiter;	
-//}
 
 typedef struct s_data {
 	int		number;
@@ -45,7 +42,10 @@ void	ft_err_sys(int condition, char *file, int line);
 //utils
 void	close_fd(int fd, char *file, int line);
 void	duplicate_fd(int read_end, int write_end, char *file, int line);
-void	here_doc();
+void	free_array(char **item, int i);
+
+// here_doc
+void	here_doc(t_data *data);
 
 // set path and check accessibility
 int		pipex_set(char **av, char **env, t_data *data);

@@ -59,6 +59,7 @@ char	*check_access(char *cmd, char **path)
 	{
 		path_cmd = ft_strjoin(path[i], cmd);
 		ft_err_msg(!path_cmd, "Fail to malloc();", __FILE__, __LINE__);
+		free(path_cmd);
 		if (access(path_cmd, X_OK) == 0)
 			return (path_cmd);
 	i++;
@@ -89,5 +90,6 @@ int	pipex_set(char **av, char **env, t_data *data)
 	data->outfile = av[4];
 	get_cmd(data, av);
 	get_path_cmd(data, path);
+	free_array(path);
 	return (0);
 }

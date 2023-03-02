@@ -22,17 +22,38 @@ void	malloc_center(t_data *data)
 	ft_err_msg(!data->pid_set, "Fail to malloc();", __FILE__, __LINE__);
 }
 
+void	leak(void)
+{
+	system("leaks pipex");
+}
+
+void	free_center(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->number)
+	{
+		free_array(data->cmd_options[i], 1);
+		i++;
+	}
+	free_array(data->cmd, 0);
+	free(data->pid_set);
+	if (data->offset == 3)
+		free(data->infile);
+}
+
 int	main(int ac, char **av, char **env)
 {
 	t_data	data;
 
+	atexit(&leak);
 	if (!ft_strncmp(av[1], "here_doc", 8))
 	{
 		ft_err_msg(ac < 6, "Invalid number of arguments", __FILE__, __LINE__);
-		data.limiter = av[2]; 
+		data.limiter = av[2];
 		data.number = ac - 4;
 		data.offset = 3;
-		
 	}
 	else
 	{
@@ -43,5 +64,6 @@ int	main(int ac, char **av, char **env)
 	malloc_center(&data);
 	pipex_set(av, env, &data);
 	pipex_execute(&data, env);
+	free_center(&data);
 	return (EXIT_SUCCESS);
 }
