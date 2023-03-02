@@ -14,7 +14,8 @@ OBJS		:= $(addprefix $(OBJ_DIR), $(OBJS))
 SRCS2		= 	main_bonus.c \
 				utils_bonus.c \
 				set_bonus.c \
-				execute_bonus.c
+				execute_bonus.c \
+				here_doc.c
 
 OBJS2		:= $(SRCS2:%.c=%.o)
 

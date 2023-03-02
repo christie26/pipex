@@ -44,7 +44,7 @@ void	get_cmd(t_data *data, char **av)
 	i = 0;
 	while (i < data->number)
 	{
-		data->cmd_options[i] = ft_split(av[i + 2], ' ');
+		data->cmd_options[i] = ft_split(av[i + data->offset], ' ');
 		ft_err_msg(!data->cmd_options[i], "Fail to malloc();", \
 				__FILE__, __LINE__);
 		data->cmd[i] = data->cmd_options[i][0];
@@ -66,7 +66,7 @@ char	*check_access(char *cmd, char **path)
 		ft_err_msg(!path_cmd, "Fail to malloc();", __FILE__, __LINE__);
 		if (access(path_cmd, X_OK) == 0)
 			return (path_cmd);
-	i++;
+		i++;
 	}
 	return (0);
 }
@@ -92,8 +92,12 @@ int	pipex_set(char **av, char **env, t_data *data)
 	char	**path;
 
 	path = get_path(env);
-	data->infile = av[1];
-	data->outfile = av[data->number + 2];
+	if (data->offset == 2)
+		data->infile = av[1];
+	else
+		here_doc();
+//	printf("av[%d]\n", data->number + data->offset);
+	data->outfile = av[data->number + data->offset];
 	get_cmd(data, av);
 	get_path_cmd(data, path);
 	return (0);
