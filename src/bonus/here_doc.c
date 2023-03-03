@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/03 12:52:29 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/03/03 13:09:03 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/03 14:14:32 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,19 +41,21 @@ void	here_doc(t_data *data)
 	char	*buf;
 	char	*tmp_file;
 	int		fd;
+	size_t	len;
 
-	buf = get_next_line(STDIN_FILENO);
 	tmp_file = random_name();
 	ft_err_msg(!tmp_file, "Fail to find random file name", __FILE__, __LINE__);
 	fd = open(tmp_file, O_CREAT | O_WRONLY, 0644);
 	ft_err_sys(fd == -1, __FILE__, __LINE__);
-	while (ft_strncmp(buf, data->limiter, ft_strlen(data->limiter)))
+	len = ft_strlen(data->limiter);
+	buf = get_next_line(STDIN_FILENO);
+	while (ft_strncmp(buf, data->limiter, len) || buf[len] != '\n')
 	{
 		write(fd, buf, ft_strlen(buf));
 		free(buf);
 		buf = get_next_line(STDIN_FILENO);
 	}
 	free(buf);
-	ft_err_sys(close(fd) == -1, __FILE__, __LINE__);
+	close_fd(fd, __FILE__, __LINE__);
 	data->infile = tmp_file;
 }

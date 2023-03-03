@@ -33,7 +33,7 @@ NAME		= ./pipex
 LIBFT		= ./libft/libft.a
 
 CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g
+CFLAGS		= -Wall -Wextra -Werror
 LDFLAGS		= -fsanitize=address
 RM			= rm -f
 

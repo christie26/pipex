@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/01 21:13:38 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/03/03 13:09:07 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/03 13:44:29 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <stdlib.h>
 # include <unistd.h>
+# include <sys/wait.h>
 
 # define READ 0
 # define WRITE 1
