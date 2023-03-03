@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:36 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/03/01 21:10:44 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/03 12:32:29 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,9 +59,9 @@ char	*check_access(char *cmd, char **path)
 	{
 		path_cmd = ft_strjoin(path[i], cmd);
 		ft_err_msg(!path_cmd, "Fail to malloc();", __FILE__, __LINE__);
-		free(path_cmd);
 		if (access(path_cmd, X_OK) == 0)
 			return (path_cmd);
+		free(path_cmd);
 	i++;
 	}
 	return (0);
@@ -90,6 +90,6 @@ int	pipex_set(char **av, char **env, t_data *data)
 	data->outfile = av[4];
 	get_cmd(data, av);
 	get_path_cmd(data, path);
-	free_array(path);
+	free_array(path, 0);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:46 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/03/01 21:08:26 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/03 12:32:49 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 
 void	free_center(t_data *data)
 {
-	free(data->cmd_options[0]);
-	free(data->cmd_options[1]);
+	free_array(data->cmd_options[0], 1);
+	free_array(data->cmd_options[1], 1);
+	free(data->cmd[0]);
+	free(data->cmd[1]);
 }
 
 int	main(int ac, char **av, char **env)

@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:46 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/03/01 21:00:58 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/03 13:09:02 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ void	free_center(t_data *data)
 	while (i < data->number)
 	{
 		free_array(data->cmd_options[i], 1);
+		free(data->cmd[i]);
 		i++;
 	}
-	free_array(data->cmd, 0);
 	free(data->pid_set);
 	if (data->offset == 3)
 		free(data->infile);
@@ -58,6 +58,7 @@ int	main(int ac, char **av, char **env)
 	else
 	{
 		ft_err_msg(ac < 5, "Invalid number of arguments", __FILE__, __LINE__);
+		(void)(data.limiter);
 		data.number = ac - 3;
 		data.offset = 2;
 	}

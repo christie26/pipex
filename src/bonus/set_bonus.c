@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:36 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/03/01 21:03:55 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/03 13:09:04 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,10 @@ char	*check_access(char *cmd, char **path)
 		path_cmd = ft_strjoin(path[i], cmd);
 		ft_err_msg(!path_cmd, "Fail to malloc();", __FILE__, __LINE__);
 		if (access(path_cmd, X_OK) == 0)
+		{
+			free(cmd);
 			return (path_cmd);
+		}
 		free(path_cmd);
 		i++;
 	}
@@ -74,19 +77,15 @@ char	*check_access(char *cmd, char **path)
 
 void	get_path_cmd(t_data *data, char **path)
 {
-	char	*tmp;
-	int		i;
+	int	i;
 
 	i = 0;
 	while (i < data->number)
 	{
-		tmp = data->cmd[i];
 		data->cmd[i] = check_access(data->cmd[i], path);
 		ft_err_msg(!(data->cmd[i]), "Invalid command !", __FILE__, __LINE__);
-		free(tmp);
 		i++;
 	}
-	free_array(path, 0);
 }
 
 int	pipex_set(char **av, char **env, t_data *data)
@@ -101,5 +100,6 @@ int	pipex_set(char **av, char **env, t_data *data)
 	data->outfile = av[data->number + data->offset];
 	get_cmd(data, av);
 	get_path_cmd(data, path);
+	free_array(path, 0);
 	return (0);
 }

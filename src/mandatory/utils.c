@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:25 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/03/01 20:33:48 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/03 12:31:10 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,11 +54,8 @@ void	duplicate_fd(int read_end, int write_end, char *file, int line)
 	ft_err_sys(ret2 == -1, file, line);
 }
 
-void	free_array(char **item)
+void	free_array(char **item, int i)
 {
-	int	i;
-
-	i = 0;
 	while (item[i])
 	{
 		free(item[i]);
