@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:36 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/03/03 12:32:29 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/04 14:17:28 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,10 @@ char	*check_access(char *cmd, char **path)
 		path_cmd = ft_strjoin(path[i], cmd);
 		ft_err_msg(!path_cmd, "Fail to malloc();", __FILE__, __LINE__);
 		if (access(path_cmd, X_OK) == 0)
+		{
+			free(cmd);
 			return (path_cmd);
+		}
 		free(path_cmd);
 	i++;
 	}
@@ -69,16 +72,12 @@ char	*check_access(char *cmd, char **path)
 
 void	get_path_cmd(t_data *data, char **path)
 {
-	char	*tmp;
-
-	tmp = data->cmd[0];
 	data->cmd[0] = check_access(data->cmd[0], path);
 	ft_err_msg(!data->cmd[0], "Invalid command !", __FILE__, __LINE__);
-	free(tmp);
-	tmp = data->cmd[1];
+	data->cmd_options[0][0] = data->cmd[0];
 	data->cmd[1] = check_access(data->cmd[1], path);
 	ft_err_msg(!data->cmd[1], "Invalid command !", __FILE__, __LINE__);
-	free(tmp);
+	data->cmd_options[1][0] = data->cmd[1];
 }
 
 int	pipex_set(char **av, char **env, t_data *data)

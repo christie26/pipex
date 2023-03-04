@@ -6,7 +6,7 @@
 /*   By: yoonsele <yoonsele@student.42.kr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/23 16:14:36 by yoonsele          #+#    #+#             */
-/*   Updated: 2023/03/03 13:42:17 by yoonsele         ###   ########.fr       */
+/*   Updated: 2023/03/04 14:18:06 by yoonsele         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ void	get_path_cmd(t_data *data, char **path)
 	{
 		data->cmd[i] = check_access(data->cmd[i], path);
 		ft_err_msg(!(data->cmd[i]), "Invalid command !", __FILE__, __LINE__);
+		data->cmd_options[i][0] = data->cmd[i];
 		i++;
 	}
 }
