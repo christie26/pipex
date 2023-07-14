@@ -15,7 +15,7 @@ SRCS2		= 	main_bonus.c \
 				utils_bonus.c \
 				set_bonus.c \
 				execute_bonus.c \
-				here_doc.c
+				heredoc_bonus.c
 
 OBJS2		:= $(SRCS2:%.c=%.o)
 
